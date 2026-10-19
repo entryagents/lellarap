@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
     await sql`
-      INSERT INTO sessions (id, user_id, token, expires_at)
+      INSERT INTO auth_sessions (id, user_id, token, expires_at)
       VALUES (${`sess_${crypto.randomBytes(8).toString("hex")}`}, ${user.id}, ${token}, ${expiresAt});
     `;
 

@@ -13,7 +13,7 @@ export async function GET() {
 
     const rows = await sql`
       SELECT u.id, u.name, u.email 
-      FROM sessions s
+      FROM auth_sessions s
       JOIN users u ON s.user_id = u.id
       WHERE s.token = ${token} AND s.expires_at > CURRENT_TIMESTAMP;
     `;
@@ -33,7 +33,7 @@ export async function POST() {
   const token = cookieStore.get("lellarap_session")?.value;
   if (token && sql) {
     try {
-      await sql`DELETE FROM sessions WHERE token = ${token};`;
+      await sql`DELETE FROM auth_sessions WHERE token = ${token};`;
     } catch (e) {}
   }
   const res = NextResponse.json({ ok: true });

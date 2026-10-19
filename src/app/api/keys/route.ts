@@ -12,14 +12,14 @@ export async function GET() {
       let userRows: any[] = [];
       if (token) {
         userRows = await sql`
-          SELECT user_id FROM sessions WHERE token = ${token} AND expires_at > CURRENT_TIMESTAMP;
+          SELECT user_id FROM auth_sessions WHERE token = ${token} AND expires_at > CURRENT_TIMESTAMP;
         `;
       }
       const userId = userRows[0]?.user_id;
 
       const rows = userId
-        ? await sql`SELECT id, name, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status FROM api_keys WHERE user_id = ${userId} ORDER BY created_at DESC;`
-        : await sql`SELECT id, name, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status FROM api_keys ORDER BY created_at DESC LIMIT 20;`;
+        ? await sql`SELECT id, name, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status FROM lellarap_api_keys WHERE user_id = ${userId} ORDER BY created_at DESC;`
+        : await sql`SELECT id, name, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status FROM lellarap_api_keys ORDER BY created_at DESC LIMIT 20;`;
 
       return NextResponse.json({ keys: rows });
     } catch (e) {
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const cookieStore = await cookies();
     const token = cookieStore.get("lellarap_session")?.value;
     if (token) {
-      const userRows: any[] = await sql`SELECT user_id FROM sessions WHERE token = ${token} AND expires_at > CURRENT_TIMESTAMP;`;
+      const userRows: any[] = await sql`SELECT user_id FROM auth_sessions WHERE token = ${token} AND expires_at > CURRENT_TIMESTAMP;`;
       userId = userRows[0]?.user_id || null;
     }
   }
@@ -69,7 +69,7 @@ export async function POST(req: Request) {
   if (sql) {
     try {
       await sql`
-        INSERT INTO api_keys (id, user_id, name, key_hash, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status)
+        INSERT INTO lellarap_api_keys (id, user_id, name, key_hash, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status)
         VALUES (${id}, ${userId}, ${name}, ${keyHash}, ${keyPrefix}, ${now}, ${now}, 0, 120, 'active');
       `;
     } catch (e) {
