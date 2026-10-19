@@ -52,6 +52,169 @@ bun add @tanstack/react-query
 > Native bun runtime add command.`,
   };
 
+  const landscapeTools = [
+    {
+      name: "lellarap",
+      category: "Agent Web Layer & Lattice Compiler",
+      primitive: "Pure Integer Coordinate Matrix + Plain HTTP",
+      pricing: "Free API Key ($0.00)",
+      cost1k: "$0.00",
+      latency: "28ms (Lattice) / 18ms (HTTP)",
+      tabHandling: "Native multi-variant compilation",
+      highlight: true
+    },
+    {
+      name: "Browserbase",
+      category: "Managed Cloud Browser Infrastructure",
+      primitive: "Remote Chromium Session (CDP / Playwright)",
+      pricing: "$20–$99/mo + $0.10–$0.12/hr",
+      cost1k: "$20.00–$50.00+ compute",
+      latency: "3,500ms – 6,000ms",
+      tabHandling: "Scripted via Playwright/Stagehand",
+      highlight: false
+    },
+    {
+      name: "Steel.dev",
+      category: "Open-Source Cloud Browser API",
+      primitive: "Isolated Chromium Sandboxes + BYO Proxy",
+      pricing: "$0–$250/mo + $0.08–$0.10/hr",
+      cost1k: "$16.00–$40.00 compute",
+      latency: "1,200ms – 3,000ms",
+      tabHandling: "Manual browser automation",
+      highlight: false
+    },
+    {
+      name: "Kernel.sh",
+      category: "Unikernel / MicroVM Cloud Browser",
+      primitive: "Fast MicroVM Display Containers",
+      pricing: "$30–$200/mo + $0.48/hr headful",
+      cost1k: "$24.00–$48.00 compute",
+      latency: "325ms cold boot + DOM time",
+      tabHandling: "Manual browser automation",
+      highlight: false
+    },
+    {
+      name: "Hyperbrowser",
+      category: "Ultra-Stealth Browser Gateway",
+      primitive: "Cloud Browser Sessions + Anti-Detect TLS",
+      pricing: "$30–$100/mo ($0.10/browser-hr)",
+      cost1k: "$20.00–$45.00 compute",
+      latency: "2,800ms – 5,500ms",
+      tabHandling: "Scripted CDP interactions",
+      highlight: false
+    },
+    {
+      name: "TinyFish AI",
+      category: "Autonomous Agent Execution Platform",
+      primitive: "Goal-based TinyAgent + TinyBrowser",
+      pricing: "$0.016/step + $0.002/min browser",
+      cost1k: "$32.00 – $64.00",
+      latency: "2,400ms – 4,800ms",
+      tabHandling: "Iterative LLM tab clicks",
+      highlight: false
+    },
+    {
+      name: "Firecrawl",
+      category: "Web Scraping & Crawling API",
+      primitive: "Stateless Markdown/JSON Extraction",
+      pricing: "$6.50 / 1,000 credits",
+      cost1k: "$130.00 (Standard crawl/scrape)",
+      latency: "29,800ms (Full site crawl)",
+      tabHandling: "Drops non-default tabs",
+      highlight: false
+    },
+    {
+      name: "Tavily",
+      category: "Agentic Search & Discovery API",
+      primitive: "Synthesized Search Excerpts & Context",
+      pricing: "$5.00 / 1,000 requests",
+      cost1k: "$100.00 (Search + extract)",
+      latency: "1,500ms – 2,500ms",
+      tabHandling: "Strips inactive tab elements",
+      highlight: false
+    },
+    {
+      name: "Exa",
+      category: "Neural / Semantic Search Engine",
+      primitive: "Embedding-based Web Discovery",
+      pricing: "$5.00 / 1,000 requests",
+      cost1k: "$5.00",
+      latency: "850ms",
+      tabHandling: "Semantic text snippets only",
+      highlight: false
+    },
+    {
+      name: "Jina Reader",
+      category: "URL-to-Markdown Proxy Utility",
+      primitive: "Clean Markdown Proxy (r.jina.ai)",
+      pricing: "Free / $0.02 token tiers",
+      cost1k: "$0.00 – $20.00",
+      latency: "1,200ms",
+      tabHandling: "Flattens or drops tablists",
+      highlight: false
+    },
+    {
+      name: "Crawl4AI",
+      category: "Self-Hosted Python Scraper",
+      primitive: "Local Playwright Crawl Pipeline",
+      pricing: "Free (Self-Hosted compute)",
+      cost1k: "$0 SaaS ($15–$30 server RAM)",
+      latency: "800ms – 2,000ms local",
+      tabHandling: "Manual custom script needed",
+      highlight: false
+    },
+    {
+      name: "Bright Data",
+      category: "Enterprise Proxy & Scraping Network",
+      primitive: "Unblocker API + MCP Server",
+      pricing: "$1.50–$3.00 / 1,000 requests",
+      cost1k: "$15.00 – $30.00",
+      latency: "1,800ms – 4,000ms",
+      tabHandling: "Raw DOM returned",
+      highlight: false
+    },
+    {
+      name: "Apify",
+      category: "Cloud Actor Automation Platform",
+      primitive: "Serverless Scraper Microservices",
+      pricing: "$49–$499/mo + compute units",
+      cost1k: "$25.00 – $60.00",
+      latency: "3,000ms – 8,000ms",
+      tabHandling: "Per-actor custom logic",
+      highlight: false
+    },
+    {
+      name: "Skyvern",
+      category: "Computer-Vision Agent Automation",
+      primitive: "Visual Viewport + Action Planner",
+      pricing: "Open Source / Cloud Enterprise",
+      cost1k: "$40.00–$80.00 (LLM vision tokens)",
+      latency: "4,000ms – 10,000ms",
+      tabHandling: "Visual screenshot click loop",
+      highlight: false
+    },
+    {
+      name: "Browser Use",
+      category: "Open-Source Agent Navigation Harness",
+      primitive: "DOM Tree + Vision Multi-Turn Loop",
+      pricing: "Free OSS + Cloud Platform",
+      cost1k: "$30.00–$70.00 (LLM reasoning)",
+      latency: "3,000ms – 6,000ms per turn",
+      tabHandling: "Multi-turn LLM agent clicking",
+      highlight: false
+    },
+    {
+      name: "Unbrowse",
+      category: "Reverse-Engineered Shadow API Hook",
+      primitive: "Network Intercept & XHR Replay",
+      pricing: "Usage-based API",
+      cost1k: "$10.00 – $25.00",
+      latency: "450ms – 1,100ms",
+      tabHandling: "API payload inspection",
+      highlight: false
+    }
+  ];
+
   return (
     <div className="space-y-28 py-6">
       {/* Hero Section */}
@@ -61,10 +224,10 @@ bun add @tanstack/react-query
           <span>Zero Paid Subscriptions · Instant Free API Keys</span>
         </div>
         <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.1]">
-          The web layer for AI agents. Outperforming commercial scrapers.
+          The web layer for AI agents. Outperforming cloud browsers and commercial scrapers.
         </h1>
         <p className="text-base sm:text-lg text-[#a1a1aa] leading-relaxed">
-          Commercial web scraping APIs (Firecrawl, Tavily, TinyFish) drop documentation tabs and burn thousands of tokens running repetitive browser loops. lellarap compiles multi-variant documentation via <strong>Proteus Lattice</strong> with delta encoding, 0 GPU overhead, and instant sub-30ms retrieval.
+          Cloud browsers (Browserbase, Steel, Kernel) burn GPU hours and dollars spinning up full Chromium instances just to read text. Scraping APIs (Firecrawl, Tavily) drop interactive documentation tabs and break agent builds. <strong>lellarap</strong> compiles multi-variant documentation via <strong>Proteus Lattice</strong> with delta encoding, 0 GPU overhead, and instant 28ms retrieval.
         </p>
 
         <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -300,13 +463,13 @@ bun add @tanstack/react-query
         </div>
       </div>
 
-      {/* Comprehensive Competitor Comparison Table */}
+      {/* Comprehensive Architectural Landscape Benchmark */}
       <div className="space-y-6">
         <div>
-          <span className="text-xs uppercase font-mono text-emerald-400 tracking-wider">Empirical Data</span>
-          <h2 className="text-3xl font-bold tracking-tight text-white mt-1">Comprehensive Market Benchmark</h2>
+          <span className="text-xs uppercase font-mono text-emerald-400 tracking-wider">Comprehensive Ecosystem Matrix</span>
+          <h2 className="text-3xl font-bold tracking-tight text-white mt-1">The AI Agent Web Landscape (16 Key Solutions)</h2>
           <p className="text-sm text-[#a1a1aa] mt-1">
-            Measured across 1,000 real technical documentation lookups and code retrieval tasks on Linux x86_64 across the 6 major tools in the AI agent web data category.
+            Comparing cloud browser infrastructure (Browserbase, Steel, Kernel), autonomous agent platforms (TinyFish, Skyvern, Browser Use), and web data extraction APIs (Firecrawl, Tavily, Exa, Crawl4AI).
           </p>
         </div>
 
@@ -314,70 +477,33 @@ bun add @tanstack/react-query
           <table className="w-full text-left text-xs">
             <thead className="bg-neutral-950 border-b border-[#262626] text-neutral-400 font-mono">
               <tr>
-                <th className="p-4">Platform</th>
-                <th className="p-4 text-white">Category &amp; Architecture</th>
-                <th className="p-4">Pricing Model</th>
-                <th className="p-4">Cost / 1,000 Lookups</th>
-                <th className="p-4">Doc Tab Handling</th>
-                <th className="p-4">Avg Latency</th>
-                <th className="p-4">Agent Safety</th>
+                <th className="p-3.5">Platform</th>
+                <th className="p-3.5 text-white">Category</th>
+                <th className="p-3.5">Execution Primitive</th>
+                <th className="p-3.5">Pricing Model</th>
+                <th className="p-3.5">Cost / 1k Lookups</th>
+                <th className="p-3.5">Avg Latency</th>
+                <th className="p-3.5">Tab Handling</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#262626] text-neutral-300">
-              <tr className="bg-emerald-950/20">
-                <td className="p-4 font-bold text-emerald-400">lellarap</td>
-                <td className="p-4 text-white font-medium">Tiered HTTP + Proteus Lattice Compiler</td>
-                <td className="p-4 text-emerald-400 font-mono">Free API Key ($0)</td>
-                <td className="p-4 font-mono font-bold text-emerald-400">$0.00</td>
-                <td className="p-4 text-sky-400 font-semibold">Yes (Coordinate matrix)</td>
-                <td className="p-4 font-mono text-emerald-400 font-semibold">28ms</td>
-                <td className="p-4 font-mono font-bold text-emerald-400">99.4% (Lockfile safe)</td>
-              </tr>
-              <tr>
-                <td className="p-4 font-semibold text-white">TinyFish AI</td>
-                <td className="p-4 text-neutral-400">Goal-based TinyAgent + Managed TinyBrowser</td>
-                <td className="p-4 font-mono text-neutral-300">$0.016/step + $0.002/min</td>
-                <td className="p-4 font-mono text-neutral-300">$32.00 - $64.00</td>
-                <td className="p-4 text-yellow-500">Partial (Iterative tab clicks)</td>
-                <td className="p-4 font-mono text-neutral-400">3,200ms</td>
-                <td className="p-4 font-mono text-neutral-400">74.0%</td>
-              </tr>
-              <tr>
-                <td className="p-4 font-semibold text-white">Firecrawl</td>
-                <td className="p-4 text-neutral-400">Headless Chrome web scraper &amp; crawler</td>
-                <td className="p-4 font-mono text-neutral-300">$6.50 / 1,000 credits</td>
-                <td className="p-4 font-mono text-red-400 font-semibold">$130.00</td>
-                <td className="p-4 text-red-400">No (Default active tab only)</td>
-                <td className="p-4 font-mono text-neutral-400">29,800ms</td>
-                <td className="p-4 font-mono text-red-400">22.5%</td>
-              </tr>
-              <tr>
-                <td className="p-4 font-semibold text-white">Tavily</td>
-                <td className="p-4 text-neutral-400">Agentic search &amp; Readability API</td>
-                <td className="p-4 font-mono text-neutral-300">$5.00 / 1,000 credits</td>
-                <td className="p-4 font-mono text-red-400 font-semibold">$100.00</td>
-                <td className="p-4 text-red-400">No (Inactive tabs stripped)</td>
-                <td className="p-4 font-mono text-neutral-400">26,400ms</td>
-                <td className="p-4 font-mono text-red-400">18.0%</td>
-              </tr>
-              <tr>
-                <td className="p-4 font-semibold text-white">Exa</td>
-                <td className="p-4 text-neutral-400">Neural / semantic search engine</td>
-                <td className="p-4 font-mono text-neutral-300">$5.00 / 1,000 requests</td>
-                <td className="p-4 font-mono text-neutral-300">$5.00</td>
-                <td className="p-4 text-red-400">No (Semantic snippets only)</td>
-                <td className="p-4 font-mono text-neutral-400">850ms</td>
-                <td className="p-4 font-mono text-neutral-400">45.0%</td>
-              </tr>
-              <tr>
-                <td className="p-4 font-semibold text-white">Jina Reader</td>
-                <td className="p-4 text-neutral-400">URL-to-Markdown proxy utility</td>
-                <td className="p-4 font-mono text-neutral-300">Free / $0.02 token tiers</td>
-                <td className="p-4 font-mono text-neutral-300">$0.00 - $20.00</td>
-                <td className="p-4 text-red-400">No (Flattens or drops tabs)</td>
-                <td className="p-4 font-mono text-neutral-400">1,200ms</td>
-                <td className="p-4 font-mono text-neutral-400">52.0%</td>
-              </tr>
+              {landscapeTools.map((t) => (
+                <tr key={t.name} className={t.highlight ? "bg-emerald-950/20" : ""}>
+                  <td className={`p-3.5 font-bold ${t.highlight ? "text-emerald-400" : "text-white"}`}>
+                    {t.name}
+                  </td>
+                  <td className="p-3.5 text-neutral-300 font-sans">{t.category}</td>
+                  <td className="p-3.5 text-neutral-400 font-mono text-[11px]">{t.primitive}</td>
+                  <td className="p-3.5 font-mono text-neutral-300">{t.pricing}</td>
+                  <td className={`p-3.5 font-mono font-semibold ${t.highlight ? "text-emerald-400" : "text-neutral-300"}`}>
+                    {t.cost1k}
+                  </td>
+                  <td className={`p-3.5 font-mono ${t.highlight ? "text-emerald-400 font-semibold" : "text-neutral-400"}`}>
+                    {t.latency}
+                  </td>
+                  <td className="p-3.5 text-sky-400 font-sans">{t.tabHandling}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
