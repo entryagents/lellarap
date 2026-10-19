@@ -9,7 +9,7 @@ export async function GET() {
     try {
       const cookieStore = await cookies();
       const token = cookieStore.get("lellarap_session")?.value;
-      let userRows = [];
+      let userRows: any[] = [];
       if (token) {
         userRows = await sql`
           SELECT user_id FROM sessions WHERE token = ${token} AND expires_at > CURRENT_TIMESTAMP;
@@ -35,12 +35,12 @@ export async function POST(req: Request) {
   const name = body.name || "Default Autonomous Agent";
 
   // Check user session
-  let userId = null;
+  let userId: string | null = null;
   if (sql) {
     const cookieStore = await cookies();
     const token = cookieStore.get("lellarap_session")?.value;
     if (token) {
-      const userRows = await sql`SELECT user_id FROM sessions WHERE token = ${token} AND expires_at > CURRENT_TIMESTAMP;`;
+      const userRows: any[] = await sql`SELECT user_id FROM sessions WHERE token = ${token} AND expires_at > CURRENT_TIMESTAMP;`;
       userId = userRows[0]?.user_id || null;
     }
   }
