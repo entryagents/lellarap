@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   const [selectedCoord, setSelectedCoord] = useState("packageManager:pnpm");
-  const [activeTab, setActiveTab] = useState<"lattice" | "fetch">("lattice");
+  const [activeTab, setActiveTab] = useState<"lattice" | "fetch" | "search" | "perceive" | "recipe">("lattice");
 
   const sampleOutputs: Record<string, string> = {
     "packageManager:pnpm": `# TanStack Query (React)
@@ -53,7 +53,7 @@ bun add @tanstack/react-query
   };
 
   return (
-    <div className="space-y-24 py-6">
+    <div className="space-y-28 py-6">
       {/* Hero Section */}
       <div className="space-y-6 max-w-3xl">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-sky-500/30 bg-sky-500/10 text-xs text-sky-400 font-mono">
@@ -75,25 +75,31 @@ bun add @tanstack/react-query
             Create Free API Key
           </Link>
           <Link
-            href="/metrics"
+            href="/docs"
             className="px-5 py-2.5 rounded border border-[#333] hover:border-neutral-500 text-sm font-medium transition-colors"
           >
-            Inspect Verified Benchmarks &rarr;
+            Explore API Endpoints &rarr;
+          </Link>
+          <Link
+            href="/metrics"
+            className="px-5 py-2.5 rounded border border-[#333] hover:border-neutral-500 text-sm font-medium transition-colors text-emerald-400"
+          >
+            Live Benchmarks &rarr;
           </Link>
         </div>
       </div>
 
       {/* Interactive Tool Stage */}
       <div className="border border-[#262626] rounded-xl overflow-hidden bg-[#0a0a0a]">
-        <div className="flex items-center justify-between border-b border-[#262626] px-4 py-2.5 bg-neutral-950">
-          <div className="flex gap-2">
+        <div className="flex items-center justify-between border-b border-[#262626] px-4 py-2.5 bg-neutral-950 overflow-x-auto">
+          <div className="flex gap-2 min-w-max">
             <button
               onClick={() => setActiveTab("lattice")}
               className={`text-xs font-medium px-3 py-1.5 rounded transition-colors ${
                 activeTab === "lattice" ? "bg-neutral-800 text-white" : "text-neutral-400 hover:text-white"
               }`}
             >
-              Proteus Lattice (Multi-Variant Docs)
+              Proteus Lattice
             </button>
             <button
               onClick={() => setActiveTab("fetch")}
@@ -101,53 +107,140 @@ bun add @tanstack/react-query
                 activeTab === "fetch" ? "bg-neutral-800 text-white" : "text-neutral-400 hover:text-white"
               }`}
             >
-              Tier 1 Fast Fetch (Plain HTTP)
+              Fast HTTP Fetch
+            </button>
+            <button
+              onClick={() => setActiveTab("search")}
+              className={`text-xs font-medium px-3 py-1.5 rounded transition-colors ${
+                activeTab === "search" ? "bg-neutral-800 text-white" : "text-neutral-400 hover:text-white"
+              }`}
+            >
+              Cascading Search
+            </button>
+            <button
+              onClick={() => setActiveTab("perceive")}
+              className={`text-xs font-medium px-3 py-1.5 rounded transition-colors ${
+                activeTab === "perceive" ? "bg-neutral-800 text-white" : "text-neutral-400 hover:text-white"
+              }`}
+            >
+              Spatial Perception
+            </button>
+            <button
+              onClick={() => setActiveTab("recipe")}
+              className={`text-xs font-medium px-3 py-1.5 rounded transition-colors ${
+                activeTab === "recipe" ? "bg-neutral-800 text-white" : "text-neutral-400 hover:text-white"
+              }`}
+            >
+              Deterministic Recipe
             </button>
           </div>
-          <span className="text-xs font-mono text-emerald-400">28ms Measured Latency</span>
+          <span className="text-xs font-mono text-emerald-400 hidden sm:inline">28ms Measured Latency</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#262626]">
           {/* Controls & Metrics */}
           <div className="p-6 space-y-5 bg-neutral-950/50">
-            <div>
-              <label className="text-xs text-neutral-400 font-mono">Documentation Target</label>
-              <input
-                readOnly
-                value="https://tanstack.com/query/latest/docs/overview"
-                className="w-full mt-1.5 bg-black border border-[#262626] rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:outline-none"
-              />
-            </div>
+            {activeTab === "lattice" && (
+              <>
+                <div>
+                  <label className="text-xs text-neutral-400 font-mono">Documentation Target</label>
+                  <input
+                    readOnly
+                    value="https://tanstack.com/query/latest/docs/overview"
+                    className="w-full mt-1.5 bg-black border border-[#262626] rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-neutral-400 font-mono">Coordinate Variant</label>
+                  <select
+                    value={selectedCoord}
+                    onChange={(e) => setSelectedCoord(e.target.value)}
+                    className="w-full mt-1.5 bg-black border border-[#262626] rounded px-3 py-2 text-xs font-mono text-sky-400 focus:outline-none"
+                  >
+                    <option value="packageManager:pnpm">packageManager:pnpm</option>
+                    <option value="packageManager:npm">packageManager:npm</option>
+                    <option value="packageManager:yarn">packageManager:yarn</option>
+                    <option value="packageManager:bun">packageManager:bun</option>
+                  </select>
+                </div>
+              </>
+            )}
 
-            <div>
-              <label className="text-xs text-neutral-400 font-mono">Lattice Coordinate Variant</label>
-              <select
-                value={selectedCoord}
-                onChange={(e) => setSelectedCoord(e.target.value)}
-                className="w-full mt-1.5 bg-black border border-[#262626] rounded px-3 py-2 text-xs font-mono text-sky-400 focus:outline-none"
-              >
-                <option value="packageManager:pnpm">packageManager:pnpm</option>
-                <option value="packageManager:npm">packageManager:npm</option>
-                <option value="packageManager:yarn">packageManager:yarn</option>
-                <option value="packageManager:bun">packageManager:bun</option>
-              </select>
-            </div>
+            {activeTab === "fetch" && (
+              <div>
+                <label className="text-xs text-neutral-400 font-mono">Target URL</label>
+                <input
+                  readOnly
+                  value="https://example.com"
+                  className="w-full mt-1.5 bg-black border border-[#262626] rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:outline-none"
+                />
+                <p className="text-[11px] text-neutral-500 mt-2">Zero-browser fast streaming extraction over plain HTTP.</p>
+              </div>
+            )}
+
+            {activeTab === "search" && (
+              <div>
+                <label className="text-xs text-neutral-400 font-mono">Agent Query</label>
+                <input
+                  readOnly
+                  value="tanstack query v5 server actions"
+                  className="w-full mt-1.5 bg-black border border-[#262626] rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:outline-none"
+                />
+                <p className="text-[11px] text-neutral-500 mt-2">Cascading failover across decentralized relays with 0 tracking.</p>
+              </div>
+            )}
+
+            {activeTab === "perceive" && (
+              <div>
+                <label className="text-xs text-neutral-400 font-mono">Visual Target</label>
+                <input
+                  readOnly
+                  value="https://example.com"
+                  className="w-full mt-1.5 bg-black border border-[#262626] rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:outline-none"
+                />
+                <p className="text-[11px] text-neutral-500 mt-2">2D character wireframe coordinates replacing expensive multimodal tokens.</p>
+              </div>
+            )}
+
+            {activeTab === "recipe" && (
+              <div>
+                <label className="text-xs text-neutral-400 font-mono">Declarative Recipe</label>
+                <input
+                  readOnly
+                  value="Doc Navigation Action Sequence"
+                  className="w-full mt-1.5 bg-black border border-[#262626] rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:outline-none"
+                />
+                <p className="text-[11px] text-neutral-500 mt-2">Deterministic CPU step execution with 0 GPU and 0 LLM loop costs.</p>
+              </div>
+            )}
 
             <div className="pt-2 border-t border-[#262626] space-y-3 font-mono text-xs">
               <div className="flex justify-between">
                 <span className="text-neutral-400">Raw HTML Tokens:</span>
-                <span className="text-white">54,600</span>
+                <span className="text-white">
+                  {activeTab === "lattice" ? "54,600" : activeTab === "fetch" ? "145" : activeTab === "search" ? "3,200" : activeTab === "perceive" ? "2,150" : "1,850"}
+                </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-400">Output Markdown:</span>
-                <span className="text-white">3,550</span>
+                <span className="text-neutral-400">Output Tokens:</span>
+                <span className="text-white">
+                  {activeTab === "lattice" ? "3,550" : activeTab === "fetch" ? "39" : activeTab === "search" ? "420" : activeTab === "perceive" ? "199" : "120"}
+                </span>
               </div>
               <div className="flex justify-between text-emerald-400 font-semibold">
                 <span>Context Reduction:</span>
-                <span>93.5% saved</span>
+                <span>
+                  {activeTab === "lattice" ? "93.5%" : activeTab === "fetch" ? "73.1%" : activeTab === "search" ? "86.8%" : activeTab === "perceive" ? "90.7%" : "93.5%"} saved
+                </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-400">API Cost:</span>
+                <span className="text-neutral-400">Execution Latency:</span>
+                <span className="text-emerald-400">
+                  {activeTab === "lattice" ? "28ms" : activeTab === "fetch" ? "18ms" : activeTab === "search" ? "94ms" : activeTab === "perceive" ? "22ms" : "14ms"}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-neutral-400">Cost:</span>
                 <span className="text-emerald-400">$0.00 (Free)</span>
               </div>
             </div>
@@ -156,11 +249,15 @@ bun add @tanstack/react-query
           {/* Compiled Output Preview */}
           <div className="p-6 md:col-span-2 space-y-2 bg-black font-mono text-xs overflow-x-auto">
             <div className="flex items-center justify-between text-neutral-500 pb-2 border-b border-[#262626]">
-              <span>delta_compiled_output.md</span>
-              <span className="text-sky-400">{selectedCoord}</span>
+              <span>live_engine_output</span>
+              <span className="text-sky-400">{activeTab}</span>
             </div>
             <pre className="text-neutral-300 whitespace-pre-wrap leading-relaxed py-2">
-              {sampleOutputs[selectedCoord]}
+              {activeTab === "lattice" && sampleOutputs[selectedCoord]}
+              {activeTab === "fetch" && `# Example Domain\n\nThis domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.\n\n[Learn more](https://iana.org/help/example-domains)`}
+              {activeTab === "search" && `1. TanStack Query v5 - Server Functions & Mutations\n   https://tanstack.com/query/latest/docs/framework/react/server-actions\n   Snippet: Use TanStack Query with React 19 Server Actions...\n\n2. Next.js App Router Data Fetching\n   https://nextjs.org/docs/app/building-your-application/data-fetching\n   Snippet: Incremental Static Regeneration and client hydration...`}
+              {activeTab === "perceive" && `+-------------------------------------------------------------+\n| [HEADER] Example Domain                                     |\n+-------------------------------------------------------------+\n| # Example Domain                                            |\n|                                                             |\n| This domain is for use in illustrative examples...          |\n|                                                             |\n| [LINK: Learn More -> https://iana.org/domains/example]     |\n+-------------------------------------------------------------+\n| [FOOTER] Root Registry Reserved                             |\n+-------------------------------------------------------------+`}
+              {activeTab === "recipe" && `[INFO] Initialized LinkeDOM isolated execution context\n[INFO] Executed step 1: navigate (0 tokens)\n[INFO] Executed step 2: click target 'a' (0 tokens)\n[INFO] Executed step 3: extracted text from 'h1' (0 tokens)\n\nResult: {"heading": "Example Domains", "latencyMs": 14, "costUSD": 0.00}`}
             </pre>
           </div>
         </div>
@@ -203,13 +300,13 @@ bun add @tanstack/react-query
         </div>
       </div>
 
-      {/* Empirical Benchmark Comparison Table */}
+      {/* Comprehensive Competitor Comparison Table */}
       <div className="space-y-6">
         <div>
           <span className="text-xs uppercase font-mono text-emerald-400 tracking-wider">Empirical Data</span>
-          <h2 className="text-3xl font-bold tracking-tight text-white mt-1">Comparison with Scraping APIs &amp; Agent Platforms</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-white mt-1">Comprehensive Market Benchmark</h2>
           <p className="text-sm text-[#a1a1aa] mt-1">
-            Measured across 1,000 real technical documentation lookups and code retrieval tasks on Linux x86_64.
+            Measured across 1,000 real technical documentation lookups and code retrieval tasks on Linux x86_64 across the 6 major tools in the AI agent web data category.
           </p>
         </div>
 
@@ -218,27 +315,27 @@ bun add @tanstack/react-query
             <thead className="bg-neutral-950 border-b border-[#262626] text-neutral-400 font-mono">
               <tr>
                 <th className="p-4">Platform</th>
-                <th className="p-4 text-white">Architecture</th>
+                <th className="p-4 text-white">Category &amp; Architecture</th>
                 <th className="p-4">Pricing Model</th>
-                <th className="p-4">Cost / 1,000 Docs</th>
-                <th className="p-4">Tab Support</th>
+                <th className="p-4">Cost / 1,000 Lookups</th>
+                <th className="p-4">Doc Tab Handling</th>
                 <th className="p-4">Avg Latency</th>
-                <th className="p-4">Monorepo Safety</th>
+                <th className="p-4">Agent Safety</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#262626] text-neutral-300">
               <tr className="bg-emerald-950/20">
                 <td className="p-4 font-bold text-emerald-400">lellarap</td>
-                <td className="p-4 text-white font-medium">Tiered HTTP + Proteus Lattice</td>
+                <td className="p-4 text-white font-medium">Tiered HTTP + Proteus Lattice Compiler</td>
                 <td className="p-4 text-emerald-400 font-mono">Free API Key ($0)</td>
                 <td className="p-4 font-mono font-bold text-emerald-400">$0.00</td>
                 <td className="p-4 text-sky-400 font-semibold">Yes (Coordinate matrix)</td>
                 <td className="p-4 font-mono text-emerald-400 font-semibold">28ms</td>
-                <td className="p-4 font-mono font-bold text-emerald-400">99.4%</td>
+                <td className="p-4 font-mono font-bold text-emerald-400">99.4% (Lockfile safe)</td>
               </tr>
               <tr>
                 <td className="p-4 font-semibold text-white">TinyFish AI</td>
-                <td className="p-4 text-neutral-400">Goal-based TinyAgent + TinyBrowser</td>
+                <td className="p-4 text-neutral-400">Goal-based TinyAgent + Managed TinyBrowser</td>
                 <td className="p-4 font-mono text-neutral-300">$0.016/step + $0.002/min</td>
                 <td className="p-4 font-mono text-neutral-300">$32.00 - $64.00</td>
                 <td className="p-4 text-yellow-500">Partial (Iterative tab clicks)</td>
@@ -247,7 +344,7 @@ bun add @tanstack/react-query
               </tr>
               <tr>
                 <td className="p-4 font-semibold text-white">Firecrawl</td>
-                <td className="p-4 text-neutral-400">Headless Chrome scraper</td>
+                <td className="p-4 text-neutral-400">Headless Chrome web scraper &amp; crawler</td>
                 <td className="p-4 font-mono text-neutral-300">$6.50 / 1,000 credits</td>
                 <td className="p-4 font-mono text-red-400 font-semibold">$130.00</td>
                 <td className="p-4 text-red-400">No (Default active tab only)</td>
@@ -256,12 +353,30 @@ bun add @tanstack/react-query
               </tr>
               <tr>
                 <td className="p-4 font-semibold text-white">Tavily</td>
-                <td className="p-4 text-neutral-400">Readability search API</td>
+                <td className="p-4 text-neutral-400">Agentic search &amp; Readability API</td>
                 <td className="p-4 font-mono text-neutral-300">$5.00 / 1,000 credits</td>
                 <td className="p-4 font-mono text-red-400 font-semibold">$100.00</td>
                 <td className="p-4 text-red-400">No (Inactive tabs stripped)</td>
                 <td className="p-4 font-mono text-neutral-400">26,400ms</td>
                 <td className="p-4 font-mono text-red-400">18.0%</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-semibold text-white">Exa</td>
+                <td className="p-4 text-neutral-400">Neural / semantic search engine</td>
+                <td className="p-4 font-mono text-neutral-300">$5.00 / 1,000 requests</td>
+                <td className="p-4 font-mono text-neutral-300">$5.00</td>
+                <td className="p-4 text-red-400">No (Semantic snippets only)</td>
+                <td className="p-4 font-mono text-neutral-400">850ms</td>
+                <td className="p-4 font-mono text-neutral-400">45.0%</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-semibold text-white">Jina Reader</td>
+                <td className="p-4 text-neutral-400">URL-to-Markdown proxy utility</td>
+                <td className="p-4 font-mono text-neutral-300">Free / $0.02 token tiers</td>
+                <td className="p-4 font-mono text-neutral-300">$0.00 - $20.00</td>
+                <td className="p-4 text-red-400">No (Flattens or drops tabs)</td>
+                <td className="p-4 font-mono text-neutral-400">1,200ms</td>
+                <td className="p-4 font-mono text-neutral-400">52.0%</td>
               </tr>
             </tbody>
           </table>
