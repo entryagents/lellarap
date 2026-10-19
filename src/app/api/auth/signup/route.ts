@@ -16,19 +16,19 @@ export async function POST(req: Request) {
 
     const { hash, salt } = hashPassword(password);
     const userId = `usr_${crypto.randomBytes(8).toString("hex")}`;
+    const username = email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "_") + "_" + crypto.randomBytes(4).toString("hex");
     const token = generateToken();
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
     if (sql) {
-      // Check existing user
       const existing = await sql`SELECT id FROM users WHERE email = ${email.toLowerCase()};`;
       if (existing.length > 0) {
         return NextResponse.json({ ok: false, error: "An account with this email already exists." }, { status: 409 });
       }
 
       await sql`
-        INSERT INTO users (id, name, email, password_hash, salt)
-        VALUES (${userId}, ${name || "AI Engineer"}, ${email.toLowerCase()}, ${hash}, ${salt});
+        INSERT INTO users (id, username, name, email, password_hash, salt)
+        VALUES (${userId}, ${username}, ${name || "AI Engineer"}, ${email.toLowerCase()}, ${hash}, ${salt});
       `;
 
       await sql`
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
     const res = NextResponse.json({
       ok: true,
-      user: { id: userId, name: name || "AI Engineer", email: email.toLowerCase() },
+      user: { id: userId, username, name: name || "AI Engineer", email: email.toLowerCase() },
       token,
     });
 
