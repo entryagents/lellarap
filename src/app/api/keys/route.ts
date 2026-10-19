@@ -1,46 +1,51 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { sql, initDb } from "@/lib/db";
-
-// In-memory fallback if database is temporarily connecting
-const memoryKeys: any[] = [
-  {
-    id: "key_prod_default_demo",
-    name: "Autonomous Agent Fleet",
-    key_prefix: "llr_live_8f3a",
-    key_hash: "demo_hash",
-    created_at: new Date().toISOString(),
-    last_used_at: new Date().toISOString(),
-    request_count: 14209,
-    rate_limit_per_min: 120,
-    status: "active",
-  },
-];
+import { cookies } from "next/headers";
 
 export async function GET() {
   await initDb();
   if (sql) {
     try {
-      const rows = await sql`
-        SELECT id, name, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status 
-        FROM api_keys ORDER BY created_at DESC LIMIT 50;
-      `;
-      if (rows && rows.length > 0) {
-        return NextResponse.json({ keys: rows });
+      const cookieStore = await cookies();
+      const token = cookieStore.get("lellarap_session")?.value;
+      let userRows = [];
+      if (token) {
+        userRows = await sql`
+          SELECT user_id FROM sessions WHERE token = ${token} AND expires_at > CURRENT_TIMESTAMP;
+        `;
       }
+      const userId = userRows[0]?.user_id;
+
+      const rows = userId
+        ? await sql`SELECT id, name, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status FROM api_keys WHERE user_id = ${userId} ORDER BY created_at DESC;`
+        : await sql`SELECT id, name, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status FROM api_keys ORDER BY created_at DESC LIMIT 20;`;
+
+      return NextResponse.json({ keys: rows });
     } catch (e) {
       console.warn("DB query fallback:", e);
     }
   }
-  return NextResponse.json({ keys: memoryKeys });
+  return NextResponse.json({ keys: [] });
 }
 
 export async function POST(req: Request) {
   await initDb();
   const body = await req.json().catch(() => ({}));
-  const name = body.name || "Default Coding Agent";
+  const name = body.name || "Default Autonomous Agent";
 
-  // Generate production API key
+  // Check user session
+  let userId = null;
+  if (sql) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("lellarap_session")?.value;
+    if (token) {
+      const userRows = await sql`SELECT user_id FROM sessions WHERE token = ${token} AND expires_at > CURRENT_TIMESTAMP;`;
+      userId = userRows[0]?.user_id || null;
+    }
+  }
+
+  // Generate high-entropy API key
   const randomPart = crypto.randomBytes(16).toString("hex");
   const rawKey = `llr_live_${randomPart}`;
   const keyPrefix = rawKey.substring(0, 12);
@@ -50,6 +55,7 @@ export async function POST(req: Request) {
 
   const newKeyRecord = {
     id,
+    user_id: userId,
     name,
     key_prefix: keyPrefix,
     key_hash: keyHash,
@@ -63,15 +69,12 @@ export async function POST(req: Request) {
   if (sql) {
     try {
       await sql`
-        INSERT INTO api_keys (id, name, key_hash, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status)
-        VALUES (${id}, ${name}, ${keyHash}, ${keyPrefix}, ${now}, ${now}, 0, 120, 'active');
+        INSERT INTO api_keys (id, user_id, name, key_hash, key_prefix, created_at, last_used_at, request_count, rate_limit_per_min, status)
+        VALUES (${id}, ${userId}, ${name}, ${keyHash}, ${keyPrefix}, ${now}, ${now}, 0, 120, 'active');
       `;
     } catch (e) {
-      console.warn("DB insert error, using local state:", e);
-      memoryKeys.unshift(newKeyRecord);
+      console.error("DB insert error:", e);
     }
-  } else {
-    memoryKeys.unshift(newKeyRecord);
   }
 
   return NextResponse.json({

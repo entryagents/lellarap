@@ -1,18 +1,34 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { sql } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "lellarap — The Web for AI Agents. Outperforming Cloud Scrapers.",
-  description: "Open-source, ultra-lightweight web layer for AI agents. 100% Free with zero cloud subscription fees. Proteus Lattice multi-variant documentation compiler.",
+  title: "lellarap — The Web Layer for AI Agents",
+  description: "The web layer for AI agents. Outperforming commercial web scrapers and cloud retrieval APIs. 100% Free with zero subscription fees. Proteus Lattice documentation compiler.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let user = null;
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("lellarap_session")?.value;
+    if (token && sql) {
+      const rows = await sql`
+        SELECT u.id, u.name, u.email 
+        FROM sessions s
+        JOIN users u ON s.user_id = u.id
+        WHERE s.token = ${token} AND s.expires_at > CURRENT_TIMESTAMP;
+      `;
+      if (rows.length > 0) user = rows[0];
+    }
+  } catch (e) {}
+
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen flex flex-col bg-black text-[#ededed] selection:bg-neutral-800">
@@ -23,17 +39,30 @@ export default function RootLayout({
                 <path fillRule="evenodd" clipRule="evenodd" d="M6 5H10V23H26V27H6V5ZM12 11H16V19H22V23H12V11Z" />
               </svg>
               <span>lellarap</span>
-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-sky-950/80 text-sky-400 border border-sky-800/60 font-medium">Free Cloud</span>
+              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-medium">Free API</span>
             </Link>
 
             <nav className="flex items-center gap-6 text-xs text-[#a1a1aa]">
-              <Link href="/features" className="hover:text-white transition-colors">4 New Features</Link>
-              <Link href="/metrics" className="hover:text-white transition-colors">Cloud Metrics</Link>
+              <Link href="/features" className="hover:text-white transition-colors">Features</Link>
+              <Link href="/metrics" className="hover:text-white transition-colors">Scraper Benchmark</Link>
               <Link href="/keys" className="hover:text-white transition-colors">API Keys</Link>
               <Link href="/docs" className="hover:text-white transition-colors">Documentation</Link>
-              <Link href="/keys" className="px-3 py-1.5 rounded bg-white text-black font-medium hover:bg-neutral-200 transition-colors">
-                Get Free API Key
-              </Link>
+
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-white font-medium">{user.email}</span>
+                  <Link href="/keys" className="px-3 py-1.5 rounded bg-white text-black font-semibold hover:bg-neutral-200 transition-colors">
+                    Dashboard
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <Link href="/login" className="hover:text-white transition-colors">Sign In</Link>
+                  <Link href="/signup" className="px-3 py-1.5 rounded bg-white text-black font-semibold hover:bg-neutral-200 transition-colors">
+                    Sign Up
+                  </Link>
+                </div>
+              )}
             </nav>
           </div>
         </header>
@@ -46,14 +75,13 @@ export default function RootLayout({
           <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <span className="text-white font-medium">lellarap</span>
-              <span>· Outperforming Cloud Browser Fleets and SaaS Scrapers.</span>
+              <span>· Outperforming Commercial Scrapers and Web Extraction APIs.</span>
             </div>
             <div className="flex items-center gap-6">
               <Link href="/metrics" className="hover:text-white transition-colors">Telemetry</Link>
               <Link href="/docs" className="hover:text-white transition-colors">Docs</Link>
               <Link href="/keys" className="hover:text-white transition-colors">Keys</Link>
-              <a href="https://github.com/entryagents/lellarap" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a>
-              <span className="text-emerald-400">100% Free · No Subscription</span>
+              <span className="text-emerald-400 font-medium">100% Free · Zero Subscriptions</span>
             </div>
           </div>
         </footer>

@@ -19,10 +19,20 @@ export default function KeysPage() {
   const [keyName, setKeyName] = useState("");
   const [generatedKey, setGeneratedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
 
   useEffect(() => {
+    checkAuth();
     fetchKeys();
   }, []);
+
+  async function checkAuth() {
+    try {
+      const res = await fetch("/api/auth/me");
+      const data = await res.json();
+      if (data.ok && data.user) setUser(data.user);
+    } catch (e) {}
+  }
 
   async function fetchKeys() {
     try {
@@ -58,11 +68,23 @@ export default function KeysPage() {
 
   return (
     <div className="space-y-10 max-w-4xl">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">API Keys</h1>
-        <p className="text-sm text-[#a1a1aa] mt-1">
-          lellarap is 100% free with no subscriptions. Generate keys to authenticate your agent fleet against our production endpoints.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-white">API Keys</h1>
+          <p className="text-sm text-[#a1a1aa] mt-1">
+            lellarap provides free API keys with zero subscription fees. Rate limited to 120 req/min by default.
+          </p>
+        </div>
+
+        {user ? (
+          <div className="text-xs font-mono text-neutral-400 border border-[#262626] rounded px-3 py-2 bg-neutral-950">
+            Authenticated: <span className="text-white font-medium">{user.email}</span>
+          </div>
+        ) : (
+          <div className="text-xs text-neutral-400">
+            <Link href="/login" className="text-white underline font-medium">Sign In</Link> to associate keys with your account.
+          </div>
+        )}
       </div>
 
       {/* Key Creation Form */}
@@ -71,7 +93,7 @@ export default function KeysPage() {
         <form onSubmit={handleCreateKey} className="flex flex-col sm:flex-row gap-3">
           <input
             type="text"
-            placeholder="Agent name (e.g. Cursor Background Worker)"
+            placeholder="Agent label (e.g. Cursor Background Worker)"
             value={keyName}
             onChange={(e) => setKeyName(e.target.value)}
             className="flex-1 bg-black border border-[#333] rounded px-3 py-2 text-xs font-mono text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-400"
@@ -100,7 +122,7 @@ export default function KeysPage() {
               {generatedKey}
             </div>
             <p className="text-[11px] text-neutral-400">
-              Save this key now. It provides 120 req/min with zero charges or credit card requirements.
+              Save this key now. It provides immediate access to all endpoints with zero credit card requirements.
             </p>
           </div>
         )}
@@ -121,19 +143,27 @@ export default function KeysPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#262626] text-neutral-300 font-mono">
-              {keys.map((k) => (
-                <tr key={k.id}>
-                  <td className="p-3 font-sans font-medium text-white">{k.name}</td>
-                  <td className="p-3 text-sky-400">{k.key_prefix}...</td>
-                  <td className="p-3">{k.rate_limit_per_min} req/min</td>
-                  <td className="p-3 font-semibold text-emerald-400">{Number(k.request_count || 0).toLocaleString()}</td>
-                  <td className="p-3">
-                    <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800">
-                      {k.status}
-                    </span>
+              {keys.length > 0 ? (
+                keys.map((k) => (
+                  <tr key={k.id}>
+                    <td className="p-3 font-sans font-medium text-white">{k.name}</td>
+                    <td className="p-3 text-sky-400">{k.key_prefix}...</td>
+                    <td className="p-3">{k.rate_limit_per_min} req/min</td>
+                    <td className="p-3 font-semibold text-emerald-400">{Number(k.request_count || 0).toLocaleString()}</td>
+                    <td className="p-3">
+                      <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800">
+                        {k.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="p-4 text-center text-neutral-500 font-sans">
+                    No keys minted yet. Generate your first key above.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

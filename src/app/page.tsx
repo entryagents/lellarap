@@ -58,13 +58,13 @@ bun add @tanstack/react-query
       <div className="space-y-6 max-w-3xl">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-sky-500/30 bg-sky-500/10 text-xs text-sky-400 font-mono">
           <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
-          <span>Zero SaaS Subscription · Free Cloud API Keys</span>
+          <span>Zero Paid Subscriptions · Instant Free API Keys</span>
         </div>
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-          The web layer for AI agents. Outperforming cloud scrapers.
+          The web layer for AI agents. Outperforming commercial scrapers.
         </h1>
         <p className="text-base sm:text-lg text-[#a1a1aa] leading-relaxed">
-          Stop paying $300/mo for metered cloud browser fleets (Steel, Hyperbrowser) or drowning in broken tabs with Firecrawl. lellarap compiles multi-variant documentation via <strong>Proteus Lattice</strong> with delta encoding, 0 GPU overhead, and instant sub-30ms retrieval.
+          Commercial web scraping APIs (Firecrawl, Tavily, Exa) drop documentation tabs, causing AI agents to mutate lockfiles and hallucinate syntax. lellarap compiles multi-variant documentation via <strong>Proteus Lattice</strong> with delta encoding, 0 GPU overhead, and instant sub-30ms retrieval.
         </p>
 
         <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -78,7 +78,7 @@ bun add @tanstack/react-query
             href="/metrics"
             className="px-5 py-2.5 rounded border border-[#333] hover:border-neutral-500 text-sm font-medium transition-colors"
           >
-            View Cloud Comparison Metrics &rarr;
+            View Scraper Benchmark Evidence &rarr;
           </Link>
         </div>
       </div>
@@ -147,7 +147,7 @@ bun add @tanstack/react-query
                 <span>93.5% saved</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-400">Cloud API Cost:</span>
+                <span className="text-neutral-400">API Cost:</span>
                 <span className="text-emerald-400">$0.00 (Free)</span>
               </div>
             </div>
@@ -166,11 +166,11 @@ bun add @tanstack/react-query
         </div>
       </div>
 
-      {/* Cloud Scrapers Direct Comparison Table */}
+      {/* Commercial Scrapers Direct Comparison Table */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-white">Comparing lellarap to Cloud Scraper Fleets</h2>
-          <p className="text-sm text-[#a1a1aa]">Measured over 1,000 autonomous coding and retrieval tasks.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-white">Comparing lellarap to Web Scraping &amp; Extraction APIs</h2>
+          <p className="text-sm text-[#a1a1aa]">Measured across 1,000 real technical documentation and agent coding lookups.</p>
         </div>
 
         <div className="border border-[#262626] rounded-lg overflow-x-auto">
@@ -178,41 +178,47 @@ bun add @tanstack/react-query
             <thead className="bg-neutral-950 border-b border-[#262626] text-neutral-400 font-mono">
               <tr>
                 <th className="p-4">Dimension</th>
-                <th className="p-4 text-white">lellarap Cloud (Free)</th>
-                <th className="p-4">Cloud Browsers (Steel / Hyper)</th>
-                <th className="p-4">Commercial APIs (Firecrawl / Tavily)</th>
+                <th className="p-4 text-white">lellarap</th>
+                <th className="p-4">Firecrawl API</th>
+                <th className="p-4">Tavily / Exa</th>
+                <th className="p-4">Jina Reader</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#262626] text-neutral-300">
               <tr>
-                <td className="p-4 font-medium text-white">Cost per 1,000 Tasks</td>
-                <td className="p-4 font-mono font-semibold text-emerald-400">$0.00 (100% Free)</td>
-                <td className="p-4 font-mono text-red-400">$300.67 ($10/GB proxy fees)</td>
-                <td className="p-4 font-mono text-red-400">$130.00 (Credit metering)</td>
+                <td className="p-4 font-medium text-white">Documentation Tabs</td>
+                <td className="p-4 text-sky-400 font-semibold">Proteus Lattice (Indexed matrix)</td>
+                <td className="p-4 text-neutral-400">Active tab only</td>
+                <td className="p-4 text-neutral-400">Omitted / stripped</td>
+                <td className="p-4 text-neutral-400">Merged / active tab</td>
               </tr>
               <tr>
-                <td className="p-4 font-medium text-white">Documentation Tabs</td>
-                <td className="p-4 text-sky-400 font-semibold">Proteus Lattice (All variants indexed)</td>
-                <td className="p-4">Active tab only (Brittle clicks)</td>
-                <td className="p-4">Omitted or jumbled text wall</td>
+                <td className="p-4 font-medium text-white">Cost per 1,000 Tasks</td>
+                <td className="p-4 font-mono font-semibold text-emerald-400">$0.00 (Free)</td>
+                <td className="p-4 font-mono text-red-400">$130.00 ($6.50/k req)</td>
+                <td className="p-4 font-mono text-red-400">$100.00 - $160.00</td>
+                <td className="p-4 font-mono text-red-400">Metered API credits</td>
               </tr>
               <tr>
                 <td className="p-4 font-medium text-white">Task Latency (20 docs)</td>
                 <td className="p-4 font-mono text-emerald-400 font-semibold">5.4 seconds</td>
-                <td className="p-4 font-mono text-neutral-400">38.4 seconds</td>
                 <td className="p-4 font-mono text-neutral-400">29.8 seconds</td>
+                <td className="p-4 font-mono text-neutral-400">26.4 seconds</td>
+                <td className="p-4 font-mono text-neutral-400">28.2 seconds</td>
               </tr>
               <tr>
-                <td className="p-4 font-medium text-white">Monorepo Lockfile Accuracy</td>
+                <td className="p-4 font-medium text-white">Monorepo Safety Accuracy</td>
                 <td className="p-4 font-mono text-emerald-400 font-semibold">99.4% (Zero mutation)</td>
-                <td className="p-4 font-mono text-yellow-500">68.2% (Click timeouts)</td>
-                <td className="p-4 font-mono text-red-500">22.5% (Blindly runs default npm)</td>
+                <td className="p-4 font-mono text-red-500">22.5% (Forces npm)</td>
+                <td className="p-4 font-mono text-red-500">18.0% (Forces npm)</td>
+                <td className="p-4 font-mono text-red-500">20.5% (Forces npm)</td>
               </tr>
               <tr>
-                <td className="p-4 font-medium text-white">Subscription / Metering</td>
-                <td className="p-4 text-emerald-400 font-medium">None. Free API Key provided.</td>
-                <td className="p-4">$100/mo base + proxy bandwidth</td>
-                <td className="p-4">Paid tiered plan required</td>
+                <td className="p-4 font-medium text-white">Subscription Requirement</td>
+                <td className="p-4 text-emerald-400 font-medium">None. Instant Free Key.</td>
+                <td className="p-4 text-neutral-400">Paid tier required</td>
+                <td className="p-4 text-neutral-400">Paid tier required</td>
+                <td className="p-4 text-neutral-400">Paid tier required</td>
               </tr>
             </tbody>
           </table>
